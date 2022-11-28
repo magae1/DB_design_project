@@ -1,0 +1,17 @@
+#db 연결 설정
+
+#Host name
+host=
+
+#Port
+#Default port is 3306.
+port=
+
+# Database name
+database=
+
+# Username
+username=
+
+# Password for user
+password=
