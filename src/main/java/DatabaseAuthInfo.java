@@ -17,7 +17,7 @@ public class DatabaseAuthInfo {
 
     boolean parse_auth_info(String fileName) {
 
-        File file = new File("./src/" + fileName);
+        File file = new File("./src/main/resources/" + fileName);
         if (!file.isFile() || !file.exists() || file.isDirectory()) {
             System.out.println("It's not a file.");
         }
