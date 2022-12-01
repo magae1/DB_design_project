@@ -1,4 +1,5 @@
-import java.sql.*;
+import java.util.Objects;
+import java.util.Scanner;
 
 
 public class Main {
@@ -9,29 +10,33 @@ public class Main {
             System.out.println("Failed to connect with DB. Check \".auth\" file.");
             return;
         }
+        DBConnector dbConnector = new DBConnector(db_info);
+        MenuPrinter menuPrinter = new MenuPrinter();
 
+        //모드 선택 및 로그인 화면 진입
+        EnteringPage enteringPage = new EnteringPage(dbConnector);
+        enteringPage.enteringPageLoop();
 
-        String db_connection_url = String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s",
-                db_info.getHost(),
-                db_info.getPort(),
-                db_info.getDatabase_name(),
-                db_info.getUsername(),
-                db_info.getPassword());
+        String userType  = enteringPage.getChosenMode();
+        String ID = enteringPage.getID();
+        String PW = enteringPage.getPW();
+        System.out.printf("%s\t%s\t%s\n", userType, ID, PW);
 
-        String query_string = "SELECT ID, name FROM student;";
+        //메인 메뉴 진입
+        while(true) {
+            Scanner scanner = new Scanner(System.in);
+            menuPrinter.printClerkMenu();
+            System.out.println("원하시는 업무를 선택하세요('q' 또는 'Q'로 프로그램 종료)");
+            System.out.print("숫자로 입력: ");
+            String selectedMenu = scanner.next();
 
-        try {
-            Connection db_connection = DriverManager.getConnection(db_connection_url);
-            PreparedStatement db_statement = db_connection.prepareStatement(query_string);
-
-            ResultSet result = db_statement.executeQuery(query_string);
-            System.out.println("Results..");
-            while(result.next()) {
-                System.out.println(result.getString("ID") + "\t" + result.getString("name"));
+            if (Objects.equals(selectedMenu, "q") || Objects.equals(selectedMenu, "Q")) {
+                System.out.println("프로그램을 종료합니다.");
+                break;
             }
 
-        } catch(SQLException e) {
-            e.printStackTrace();
+            int selectedNum = Integer.parseInt(selectedMenu);
+            System.out.println(selectedNum);
         }
 
     }
