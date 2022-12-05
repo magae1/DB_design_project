@@ -32,30 +32,61 @@ public class Main {
         enteringPage.enteringPageLoop();
 
         String userType  = enteringPage.getChosenMode();
+        int modeNum = enteringPage.getInputMode();
         String ID = enteringPage.getID();
 
         //메인 메뉴 진입
-        MenuPrinter menuPrinter = new MenuPrinter(connection);
-        while(true) {
-            System.out.printf("\n%s\t%s\t(으)로 접속 중입니다.\n", userType, ID);
-            Scanner scanner = new Scanner(System.in);
-            menuPrinter.printClerkMenu();
-            System.out.println("원하시는 업무를 선택하세요('q' 또는 'Q'로 프로그램 종료)");
-            System.out.print("숫자로 입력: ");
-            String selectedMenu = scanner.next();
+        if (modeNum == 1) {
+            ClerkPrinter clerkPrinter = new ClerkPrinter(connection, ID);
+            while(true) {
+                System.out.printf("\n%s\t%s\t(으)로 접속 중입니다.\n", userType, ID);
+                Scanner scanner = new Scanner(System.in);
+                clerkPrinter.printMenu();
+                System.out.println("원하시는 업무를 선택하세요('q' 또는 'Q'로 프로그램 종료)");
+                System.out.print("숫자로 입력: ");
+                String selectedMenu = scanner.next();
 
-            if (Objects.equals(selectedMenu, "q") || Objects.equals(selectedMenu, "Q")) {
-                System.out.println("프로그램을 종료합니다.");
-                break;
-            }
+                if (Objects.equals(selectedMenu, "q") || Objects.equals(selectedMenu, "Q")) {
+                    System.out.println("프로그램을 종료합니다.");
+                    break;
+                }
 
-            int selectedNum = Integer.parseInt(selectedMenu);
-            System.out.printf("[%d] %s 으로 진입합니다.\n", selectedNum, menuPrinter.getClerkMenu()[selectedNum - 1]);
-            switch (selectedNum) {
-                case 1 -> menuPrinter.printClerkTasks();
-                case 4 -> menuPrinter.printClerkCustomers();
+                int selectedNum = Integer.parseInt(selectedMenu);
+                System.out.printf("[%d] %s 으로 진입합니다.\n", selectedNum, clerkPrinter.getMenu()[selectedNum - 1]);
+                switch (selectedNum) {
+                    case 1 -> clerkPrinter.printTasks();
+                    case 2 -> clerkPrinter.makeAccountPage();
+                    case 3 -> clerkPrinter.makeLoanPage();
+                    case 4 -> clerkPrinter.makeFundPage();
+                    case 5 -> clerkPrinter.printCustomers();
+                }
             }
         }
+        else {
+            CustomerPrinter customerPrinter = new CustomerPrinter(connection, ID);
+            while(true) {
+                System.out.printf("\n%s\t%s\t(으)로 접속 중입니다.\n", userType, ID);
+                Scanner scanner = new Scanner(System.in);
+                customerPrinter.printMenu();
+                System.out.println("원하시는 업무를 선택하세요('q' 또는 'Q'로 프로그램 종료)");
+                System.out.print("숫자로 입력: ");
+                String selectedMenu = scanner.next();
 
+                if (Objects.equals(selectedMenu, "q") || Objects.equals(selectedMenu, "Q")) {
+                    System.out.println("프로그램을 종료합니다.");
+                    break;
+                }
+
+                int selectedNum = Integer.parseInt(selectedMenu);
+                System.out.printf("[%d] %s 으로 진입합니다.\n", selectedNum, customerPrinter.getMenu()[selectedNum - 1]);
+                switch (selectedNum) {
+                    case 1 -> customerPrinter.printMyAccounts();
+                    case 2 -> customerPrinter.accountRequestPage();
+                    case 3 -> customerPrinter.loanRequestPage();
+                    case 4 -> customerPrinter.fundRequestPage();
+                }
+            }
+
+        }
     }
 }
